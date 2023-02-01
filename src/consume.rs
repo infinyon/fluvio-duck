@@ -119,7 +119,7 @@ unsafe fn internal_read(info: &FunctionInfo, output: &DataChunk) -> Result<()> {
                 if let Err(err) =
                     column
                         .mapping
-                        .map(&record, column_index as u64, row, &output, &column.ty)
+                        .map(&record, column_index as u64, row, output, &column.ty)
                 {
                     info.set_error(&err.to_string());
                 }
@@ -330,7 +330,7 @@ impl MappingTrait for JqlMapper {
             Ok(value) => value,
             Err(err) => {
                 let value_vector = output.get_vector(colum);
-                value_vector.assign_string_element(row as idx_t, err.to_string().as_bytes());
+                value_vector.assign_string_element(row as idx_t, err.as_bytes());
                 return Ok(());
             }
         };
@@ -384,8 +384,7 @@ impl MappingTrait for JqlMapper {
                         }
                     }
                     DuckDBTypeEnum::Double => {
-                        if let Some(f) = n.as_f64() {
-                            let val = f as f64;
+                        if let Some(val) = n.as_f64() {
                             let value_vector = output.get_vector(colum);
                             value_vector.set_data(row, val);
                         }
@@ -405,11 +404,11 @@ impl MappingTrait for JqlMapper {
                 match ty {
                     DuckDBTypeEnum::Integer => {
                         let value_vector = output.get_vector(colum);
-                        value_vector.set_data(row, 0 as i32);
+                        value_vector.set_data(row, 0_i32);
                     }
                     DuckDBTypeEnum::Uinteger => {
                         let value_vector = output.get_vector(colum);
-                        value_vector.set_data(row, 0 as i64);
+                        value_vector.set_data(row, 0_i64);
                     }
                     DuckDBTypeEnum::Float => {
                         let value_vector = output.get_vector(colum);
@@ -573,7 +572,7 @@ mod opt {
 
     impl ConsumeOpt {
         pub fn parse_from_string(input: &str) -> Result<Self> {
-            let wrapper = format!("ConsumeOpt {}", input);
+            let wrapper = format!("ConsumeOpt {input}");
             let args = wrapper.split_whitespace();
             ConsumeOpt::try_parse_from(args).map_err(|err| err.into())
         }
@@ -657,14 +656,13 @@ mod opt {
             } else if !self.transform.is_empty() {
                 let config =
                     TransformationConfig::try_from(self.transform.clone()).map_err(|err| {
-                        anyhow!(format!("unable to parse `transform` argument: {}", err))
+                        anyhow!(format!("unable to parse `transform` argument: {err}"))
                     })?;
                 create_smartmodule_list(config)?
             } else if let Some(transforms_file) = &self.transforms_file {
                 let config = TransformationConfig::from_file(transforms_file).map_err(|err| {
                     anyhow!(format!(
-                        "unable to process `transforms_file` argument: {}",
-                        err
+                        "unable to process `transforms_file` argument: {err}"
                     ))
                 })?;
                 create_smartmodule_list(config)?
@@ -700,7 +698,7 @@ mod opt {
     fn parse_key_val(s: &str) -> Result<(String, String)> {
         let pos = s
             .find('=')
-            .ok_or_else(|| anyhow!(format!("invalid KEY=value: no `=` found in `{}`", s)))?;
+            .ok_or_else(|| anyhow!(format!("invalid KEY=value: no `=` found in `{s}`")))?;
         Ok((s[..pos].parse()?, s[pos + 1..].parse()?))
     }
 
@@ -708,7 +706,7 @@ mod opt {
         match s {
             "read_committed" | "ReadCommitted" | "readCommitted" | "readcommitted" => Ok(Isolation::ReadCommitted),
             "read_uncommitted" | "ReadUncommitted" | "readUncommitted" | "readuncommitted" => Ok(Isolation::ReadUncommitted),
-            _ => Err(format!("unrecognized isolation: {}. Supported: read_committed (ReadCommitted), read_uncommitted (ReadUncommitted)", s)),
+            _ => Err(format!("unrecognized isolation: {s}. Supported: read_committed (ReadCommitted), read_uncommitted (ReadUncommitted)")),
         }
     }
 

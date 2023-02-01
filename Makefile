@@ -30,3 +30,18 @@ release: pull
 	cd build/release && \
 	cmake $(GENERATOR) $(FORCE_COLOR) -DCMAKE_BUILD_TYPE=RelWithDebInfo ${BUILD_FLAGS} ../../duckdb/CMakeLists.txt -DEXTERNAL_EXTENSION_DIRECTORIES=../../fluvio-duck -B. && \
 	cmake --build . --config Release
+
+install-clippy:
+	rustup component add clippy
+
+install-fmt:
+	rustup component add rustfmt
+
+	
+check-clippy:	install-clippy
+	cargo clippy --all-features
+
+check-fmt:	install-fmt
+	cargo fmt -- --check
+
+

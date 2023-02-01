@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - staging
+      - trying
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Check ${{ matrix.check }} on (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        rust: [stable]
+        check: [test]
+        include:
+          - os: ubuntu-latest
+            rust: stable
+            check: fmt
+          - os: ubuntu-latest
+            rust: stable
+            check: clippy
+          - os: ubuntu-latest
+            rust: stable
+            check: audit
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install ${{ matrix.rust }}
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust }}
+          profile: minimal
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.os }}-${{ matrix.check }}
+      - name: Clippy
+        if: ${{ matrix.check == 'clippy' }}
+        run: make check-clippy
+      - name: Fmt
+        if: ${{ matrix.check == 'fmt' }}
+        run: make check-fmt
+
+  done:
+    name: Done
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Done
+        run: echo "Done!"
