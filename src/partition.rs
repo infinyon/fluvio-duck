@@ -133,7 +133,7 @@ unsafe fn internal_read(info: &FunctionInfo, output: &DataChunk) -> Result<()> {
         row += 1;
     }
 
-    output.set_size(row as u64);
+    output.set_size(row);
     (*init_data).done = true;
 
     Ok(())
