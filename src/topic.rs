@@ -19,7 +19,7 @@ use crate::bind::{
 
 pub fn fluvio_admin_topic_function_def() -> TableFunction {
     let table_function = TableFunction::new();
-    table_function.set_name("fluvio_topic");
+    table_function.set_name("fluvio_topics");
 
     table_function.set_function(Some(topic_read));
     table_function.set_init(Some(topic_init));

@@ -20,7 +20,7 @@ use crate::bind::{
 
 pub fn fluvio_admin_partition_function_def() -> TableFunction {
     let table_function = TableFunction::new();
-    table_function.set_name("fluvio_partition");
+    table_function.set_name("fluvio_partitions");
 
     table_function.set_function(Some(partition_read));
     table_function.set_init(Some(partition_init));

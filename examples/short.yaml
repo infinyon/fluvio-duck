@@ -1,0 +1,28 @@
+transforms:
+  - uses: infinyon/jolt@0.1.0
+    with:
+      spec:
+        - operation: shift
+          spec:
+            payload:
+              VP:
+                lat: "lat"
+                long: "long"
+                veh: "vehicle"
+                route: "route"
+                spd: "speed"
+                tst: "tst"
+                acc: "acc"
+                line: "line"
+                stop: "stop"
+                desi: "desi"
+                oper: "oper"
+                dl: "dl"
+                odo: "odo"
+                drst: "drst"
+                occu: "occu"
+                hdg: "hdg"
+                dir: "dir"
+                tsi: "tsi"
+                jrn: "jrn"
+                start: "start"
