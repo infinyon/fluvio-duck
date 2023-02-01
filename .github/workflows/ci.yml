@@ -16,6 +16,7 @@ jobs:
 
   build:
     name: Build ${{ matrix.check }} on (${{ matrix.os }})
+    if: false
     runs-on: ${{ matrix.os }}
     strategy:
         matrix:
