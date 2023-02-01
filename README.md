@@ -1,7 +1,13 @@
-#Loading
+# Introduction
 
+fluvio-duck is a DuckDB extension to work with Fluvio streaming platform.  It allows you to query Fluvio topics and partitions using SQL.  It also allows you to consume Fluvio topics using SQL.
+
+# Building extension
+
+For debugging and testing
 ## Debug 
 
+Execute the following command to build the extension in debug mode:
 ```
 make debug
 ```
@@ -9,14 +15,16 @@ make debug
 Loading extension:
 
 ```
-./build/debug/duckdb --unsigned
+$ ./build/debug/duckdb --unsigned
 
-load './build/debug/extension/fluvio-duck/fluvioduck.duckdb_extension';
->> getting version
->> init
+D load './build/debug/extension/fluvio-duck/fluvioduck.duckdb_extension';
 ```
 
+Note that Debug mode should not be used for large data sets. It is very slow.
+
 ## Release
+
+Execute the following command to build the extension in release mode.  Note that building release will take longer than debug mode.
 
 ```
 make release
@@ -29,13 +37,12 @@ $ ./build/release/duckdb --unsigned
 D load './build/release/extension/fluvio-duck/fluvioduck.duckdb_extension';
 ```
 
-# Running cloud demo
-  
-Start cats-facts and helinki in the cloud demo repo.
-Download Jolt and Regex SmartModule in the UI console.
+# Running extension
+
+Load either debug or release version of the extension as in the previous section.
 
 
-# Getting topics and partitions
+## Getting topics and partitions
 
 ```
 D select * from fluvio_topic();
@@ -60,6 +67,33 @@ select * from fluvio_partition();
 └───────────┴───────────┴─────────┘
 
 ```
+
+# Helsinki Demo
+
+This demo requires development release of CDK and MQTT connector.
+
+## Connect to Fluvio
+
+Either set up local Fluvio cluster (https://www.fluvio.io) or connect to Infinyon cloud at https://infinyon.cloud/signup.
+
+Test by running this command:
+
+```
+$ fluvio topic list
+< show topic list>
+```
+
+## Download Connector Developer Kit (CDK)
+
+Download CDK by running this command:
+
+```
+$ fluvio install --hub cdk
+```
+
+
+
+
 
 Computing total number of offets
 ```
