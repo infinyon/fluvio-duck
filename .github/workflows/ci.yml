@@ -13,7 +13,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+
+  build:
+    name: Build ${{ matrix.check }} on (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+        matrix:
+          os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.os }}-build
+      - name: Build
+        run: make debug
+
+  check:
     name: Check ${{ matrix.check }} on (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
@@ -52,7 +72,7 @@ jobs:
   done:
     name: Done
     needs:
-      - test
+      - check
     runs-on: ubuntu-latest
     steps:
       - name: Done
