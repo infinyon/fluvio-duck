@@ -29,3 +29,6 @@ set(LIB_NAME ${TARGET_NAME}_loadable_extension)
 set_target_properties(${LIB_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(${LIB_NAME}
                       "${CMAKE_CURRENT_BINARY_DIR}/lib${TARGET_NAME}.a")
+
+target_link_libraries(${LIB_NAME}
+                      "${CMAKE_BINARY_DIR}/src/libduckdb_static.a")
