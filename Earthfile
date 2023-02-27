@@ -1,23 +1,6 @@
 VERSION 0.6
 FROM ubuntu:20.04
 
-## for apt to be noninteractive
-ENV DEBIAN_FRONTEND noninteractive
-ENV DEBCONF_NONINTERACTIVE_SEEN true
-
-RUN apt-get update && apt-get install -y build-essential cmake git wget curl 
-RUN wget https://github.com/Kitware/CMake/releases/download/v3.26.0-rc4/cmake-3.26.0-rc4-linux-aarch64.sh \
-    -q -O /tmp/cmake-install.sh \
-    && chmod u+x /tmp/cmake-install.sh \
-    && mkdir /opt/cmake \
-    && /tmp/cmake-install.sh --skip-license --prefix=/opt/cmake \
-    && rm /tmp/cmake-install.sh \
-    && ln -s /opt/cmake/bin/* /usr/local/bin
-
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-# RUN rustup update stable && rustup default stable
-# RUN source $HOME/.cargo/env
-
 WORKDIR /fluvio-duck
 
 code:
@@ -25,8 +8,32 @@ code:
     COPY Cargo.lock Cargo.toml CMakeLists.txt Makefile ./
 build:
   FROM +code
+  ARG USERPLATFORM
+  ARG NATIVEPLATFORM
+  ARG TARGETPLATFORM
+  ARG EARTHLY_TARGET
+  ARG TARGETARCH
+  ARG TARGETOS
+  ARG TARGETPLATFORM
+  RUN echo "The current target is $EARTHLY_TARGET"
+  RUN echo "The current target arch is $TARGETARCH" 
+  RUN echo "The current target os is $TARGETOS"
+  RUN echo "The current target os is $TARGETPLATFORM"
+  ## for apt to be noninteractive
+  # ENV DEBIAN_FRONTEND noninteractive
+  # ENV DEBCONF_NONINTERACTIVE_SEEN true
+  RUN echo "The current target is $EARTHLY_TARGET"
+  RUN echo "The current target arch is $TARGETARCH" 
+  RUN echo "The current target os is $TARGETOS"
+  RUN echo "The current target os is $TARGETPLATFORM"
+  RUN apt-get update 
+  RUN DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true TZ=Etc/UTC apt-get install -yqq --no-install-recommends build-essential git wget curl software-properties-common lsb-release apt-utils
+  RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
+  RUN apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
+  RUN DEBIAN_FRONTEND=noninteractive apt update && apt install -yq cmake
+  RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
   RUN make release
   # cache cmake temp files to prevent rebuilding .o files
   # when the .cpp files don't change
-  RUN --mount=type=cache,target=/code/CMakeFiles make
+  # RUN --mount=type=cache,target=/fluvio-duck/CMakeFiles make
 #   SAVE ARTIFACT fibonacci AS LOCAL "fibonacci"
