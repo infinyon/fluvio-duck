@@ -4,7 +4,7 @@ FROM ubuntu:20.04
 WORKDIR /fluvio-duck
 
 code:
-    COPY --dir src duckdb ./ 
+    COPY --dir src duckdb .git ./ 
     COPY Cargo.lock Cargo.toml CMakeLists.txt Makefile ./
 build:
   FROM +code
@@ -32,8 +32,8 @@ build:
   RUN apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
   RUN DEBIAN_FRONTEND=noninteractive apt update && apt install -yq cmake
   RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-  RUN make release
+  #RUN make release
   # cache cmake temp files to prevent rebuilding .o files
   # when the .cpp files don't change
-  # RUN --mount=type=cache,target=/fluvio-duck/CMakeFiles make
+  RUN --mount=type=cache,target=/fluvio-duck/build/release/CMakeFiles make release
 #   SAVE ARTIFACT fibonacci AS LOCAL "fibonacci"
