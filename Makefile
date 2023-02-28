@@ -12,7 +12,7 @@ endif
 BUILD_FLAGS=-DEXTENSION_STATIC_BUILD=1 ${OSX_BUILD_UNIVERSAL_FLAG}
 
 pull:
-	#git submodule init
+	git submodule init
 	git submodule update --recursive --remote
 
 clean:
@@ -25,7 +25,7 @@ debug:pull
 	cmake $(GENERATOR) $(FORCE_COLOR) -DCMAKE_BUILD_TYPE=Debug ${BUILD_FLAGS} ../../duckdb/CMakeLists.txt -DEXTERNAL_EXTENSION_DIRECTORIES=../../fluvio-duck -B. && \
 	cmake --build . --config Debug
 
-release:
+release:pull
 	mkdir -p build/release && \
 	cd build/release && \
 	cmake $(GENERATOR) $(FORCE_COLOR) -DCMAKE_BUILD_TYPE=RelWithDebInfo ${BUILD_FLAGS} ../../duckdb/CMakeLists.txt -DEXTERNAL_EXTENSION_DIRECTORIES=../../fluvio-duck -B. && \
