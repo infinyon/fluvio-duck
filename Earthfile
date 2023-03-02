@@ -16,7 +16,7 @@ all:
         --platform=linux/arm64 \
         --platform=linux/arm/v7 \
         +docker
-        
+
 code:
     COPY --dir src duckdb .git ./ 
     COPY build_extension.sh .gitmodules toolchain.toml Cargo.lock Cargo.toml CMakeLists.txt Makefile ./
@@ -42,13 +42,14 @@ build:
   # cache cmake temp files to prevent rebuilding .o files
   # when the .cpp files don't change
   RUN --mount=type=cache,target=/fluvio-duck/build/release /usr/bin/bash build_extension.sh
-  SAVE ARTIFACT ./build/release /release
+  SAVE ARTIFACT ./build/release/duckdb AS LOCAL duckdb 
+  SAVE ARTIFACT ./build/release/extension/fluvio-duck/fluvioduck.duckdb_extension fluvioduck.duckdb_extension
 
 docker:
   FROM debian:buster-slim
-  COPY --dir +build/release .
-  # COPY +build/release/extension/fluvio-duck/fluvioduck.duckdb_extension duckdb/fluvioduck.duckdb_extension
+  COPY +build/duckdb .
+  COPY +build/fluvioduck.duckdb_extension fluvioduck.duckdb_extension
   RUN false
-  RUN /release/duckdb/duckdb --unsigned
-  CMD ["/release/duckdb/duckdb", "--unsigned"]
+  RUN duckdb --unsigned
+  CMD ["duckdb", "--unsigned"]
   SAVE IMAGE --push fluvio-duckdb/extension:multiplatform
