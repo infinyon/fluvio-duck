@@ -35,7 +35,7 @@ build:
   RUN wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
   RUN apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
   RUN DEBIAN_FRONTEND=noninteractive apt update && apt install -yq cmake
-  RUN cd duckdb && make release
+  #RUN cd duckdb && make release
   RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
   #RUN make release
   # cache cmake temp files to prevent rebuilding .o files
