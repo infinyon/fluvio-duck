@@ -14,7 +14,6 @@ all:
     BUILD \
         --platform=linux/amd64 \
         --platform=linux/arm64 \
-        --platform=linux/arm/v7 \
         +docker
 
 code:
@@ -41,15 +40,14 @@ build:
   #RUN make release
   # cache cmake temp files to prevent rebuilding .o files
   # when the .cpp files don't change
-  RUN --mount=type=cache,target=/fluvio-duck/build/release /usr/bin/bash build_extension.sh
-  SAVE ARTIFACT ./build/release/duckdb AS LOCAL duckdb 
-  SAVE ARTIFACT ./build/release/extension/fluvio-duck/fluvioduck.duckdb_extension fluvioduck.duckdb_extension
+  RUN --mount=type=cache,target=/fluvio-duck/build/release/CMakeFiles/ /usr/bin/bash build_extension.sh
+  SAVE ARTIFACT ./build/release/duckdb AS LOCAL fluvio-duckdb 
+  SAVE ARTIFACT ./build/release/extension/fluvio-duck/fluvioduck.duckdb_extension AS LOCAL fluvioduck.duckdb_extension
 
 docker:
-  FROM debian:buster-slim
-  COPY +build/duckdb .
+  FROM ubuntu:20.04
+  COPY +build/duckdb duckdb
   COPY +build/fluvioduck.duckdb_extension fluvioduck.duckdb_extension
-  RUN false
-  RUN duckdb --unsigned
-  CMD ["duckdb", "--unsigned"]
+  RUN ./duckdb --unsigned
+  CMD ["./duckdb", "--unsigned"]
   SAVE IMAGE --push fluvio-duckdb/extension:multiplatform
