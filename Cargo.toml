@@ -15,8 +15,8 @@ crate-type = ["staticlib"]
 
 [dependencies]
 anyhow = "1.0.38"
-libduckdb-sys = "0.6.1"
-parquet = "32"
+libduckdb-sys = "0.7.1"
+parquet = "34"
 futures-lite = "1.11.3"
 clap = { version = "4.0.10", features = [
     "std",
@@ -33,9 +33,9 @@ tracing = "0.1.19"
 chrono = "0.4.23"
 
 # Fluvio dependencies
-fluvio = { version = "0.16.0 " }
+fluvio = { version = "0.17.0 " }
 fluvio-types = { version = "0.4.0" }
-fluvio-smartengine = { version = "0.5.4", features = [
+fluvio-smartengine = { version = "0.6.0", features = [
     "transformation",
 ], default-features = false }
 fluvio-future = { version = "0.4.0", features = ["subscriber"]}

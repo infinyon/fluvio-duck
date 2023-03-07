@@ -4,7 +4,7 @@ mod partition;
 mod topic;
 
 mod top {
-    use std::ffi::{c_char, c_void};
+    use std::ffi::c_char;
 
     use anyhow::Result;
     use libduckdb_sys::{duckdb_database, duckdb_library_version};
@@ -18,7 +18,7 @@ mod top {
     use super::consume::fluvio_consumer_table_function_def;
 
     #[no_mangle]
-    pub unsafe extern "C" fn fluvioduck_init_rust(db: *mut c_void) {
+    pub unsafe extern "C" fn fluvioduck_init_rust(db: duckdb_database) {
         fluvio_future::subscriber::init_tracer(None);
         info!("init");
         init(db).expect("init failed");
