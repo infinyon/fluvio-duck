@@ -15,6 +15,12 @@ pull:
 	git submodule init
 #	git submodule update --recursive --remote
 
+
+# Update duckdb to specific branch
+update_duckdb:
+	 git submodule update --recursive --remote
+	 cd duckdb && git checkout -b ${DUCKDB_BRANCH}
+
 clean:
 	rm -rf build
 	cargo clean

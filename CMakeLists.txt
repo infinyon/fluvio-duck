@@ -5,9 +5,6 @@ cmake_policy(VERSION 3.22)
 set(TARGET_NAME fluvioduck)   # rust lib name
 project(${TARGET_NAME} VERSION 0.0.1)
 
-if(ANDROID)
-  set(Rust_CARGO_TARGET "aarch64-linux-android")
-endif()
 
 include(FetchContent)
 
