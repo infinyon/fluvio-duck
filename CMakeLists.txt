@@ -1,5 +1,3 @@
-# cmake-lint: disable=C0103
-
 cmake_minimum_required(VERSION 3.22)
 cmake_policy(VERSION 3.22)
 set(TARGET_NAME fluvioduck)   # rust lib name
