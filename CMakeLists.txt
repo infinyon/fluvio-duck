@@ -16,7 +16,6 @@ FetchContent_MakeAvailable(Corrosion)
 corrosion_import_crate(MANIFEST_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Cargo.toml)
 
 set(ALL_SOURCES src/wrapper.h src/wrapper.c)
-#set(PARAMETERS "-warnings")
 build_loadable_extension(${TARGET_NAME}  ${ALL_SOURCES})
 
 set(LIB_NAME ${TARGET_NAME}_loadable_extension)
