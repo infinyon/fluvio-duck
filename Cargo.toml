@@ -16,7 +16,7 @@ crate-type = ["staticlib"]
 [dependencies]
 anyhow = "1.0.38"
 libduckdb-sys = "0.7.1"
-parquet = "34"
+parquet = "37"
 futures-lite = "1.11.3"
 clap = { version = "4.0.10", features = [
     "std",
