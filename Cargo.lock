@@ -168,8 +168,8 @@ dependencies = [
  "async-lock",
  "async-task",
  "concurrent-queue",
- "fastrand",
- "futures-lite",
+ "fastrand 1.9.0",
+ "futures-lite 1.13.0",
  "slab",
 ]
 
@@ -184,7 +184,7 @@ dependencies = [
  "async-io",
  "async-lock",
  "blocking",
- "futures-lite",
+ "futures-lite 1.13.0",
  "once_cell",
 ]
 
@@ -197,7 +197,7 @@ dependencies = [
  "async-lock",
  "autocfg",
  "concurrent-queue",
- "futures-lite",
+ "futures-lite 1.13.0",
  "libc",
  "log",
  "parking",
@@ -235,7 +235,7 @@ dependencies = [
  "async-io",
  "autocfg",
  "blocking",
- "futures-lite",
+ "futures-lite 1.13.0",
 ]
 
 [[package]]
@@ -250,7 +250,7 @@ dependencies = [
  "blocking",
  "cfg-if",
  "event-listener",
- "futures-lite",
+ "futures-lite 1.13.0",
  "libc",
  "signal-hook",
  "windows-sys 0.42.0",
@@ -282,7 +282,7 @@ dependencies = [
  "futures-channel",
  "futures-core",
  "futures-io",
- "futures-lite",
+ "futures-lite 1.13.0",
  "gloo-timers",
  "kv-log-macro",
  "log",
@@ -376,8 +376,8 @@ dependencies = [
  "async-lock",
  "async-task",
  "atomic-waker",
- "fastrand",
- "futures-lite",
+ "fastrand 1.9.0",
+ "futures-lite 1.13.0",
 ]
 
 [[package]]
@@ -890,6 +890,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastrand"
+version = "2.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "25cbce373ec4653f1a01a31e8a5e5ec0c622dc27ff9c4e6606eefef5cbbed4a5"
+
+[[package]]
 name = "flatbuffers"
 version = "23.1.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -996,7 +1002,7 @@ dependencies = [
  "fluvio-future",
  "fluvio-smartengine",
  "fluvio-types",
- "futures-lite",
+ "futures-lite 2.0.0",
  "jql",
  "libduckdb-sys",
  "parquet",
@@ -1016,7 +1022,7 @@ dependencies = [
  "async-trait",
  "cfg-if",
  "fluvio-wasm-timer",
- "futures-lite",
+ "futures-lite 1.13.0",
  "futures-util",
  "log",
  "openssl",
@@ -1294,11 +1300,26 @@ checksum = "bfb8371b6fb2aeb2d280374607aeabfc99d95c72edfe51692e42d3d7f0d08531"
 
 [[package]]
 name = "futures-lite"
-version = "1.12.0"
+version = "1.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7694489acd39452c77daa48516b894c153f192c3578d5a839b62c58099fcbf48"
+checksum = "49a9d51ce47660b1e808d3c990b4709f2f415d928835a17dfd16991515c46bce"
 dependencies = [
- "fastrand",
+ "fastrand 1.9.0",
+ "futures-core",
+ "futures-io",
+ "memchr",
+ "parking",
+ "pin-project-lite",
+ "waker-fn",
+]
+
+[[package]]
+name = "futures-lite"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9c1155db57329dca6d018b61e76b1488ce9a2e5e44028cac420a5898f4fcef63"
+dependencies = [
+ "fastrand 2.0.1",
  "futures-core",
  "futures-io",
  "memchr",
